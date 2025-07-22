@@ -24,29 +24,6 @@ func (b Base64Bytes) Base64String() string {
 	return base64.StdEncoding.EncodeToString(b)
 }
 
-func (b Base64Bytes) MarshalJSON() ([]byte, error) {
-	b, err := json.Marshal(b.Base64String())
-	if err != nil {
-		return nil, fmt.Errorf("marshaling Base64Bytes slice to json: %w", err)
-	}
-	return b, nil
-}
-
-func (b *Base64Bytes) UnmarshalJSON(data []byte) error {
-	var s string
-	if err := json.Unmarshal(data, &s); err != nil {
-		return fmt.Errorf("unmarshaling Base64Bytes []byte to string: %w", err)
-	}
-
-	decoded, err := base64.StdEncoding.DecodeString(s)
-	if err != nil {
-		return fmt.Errorf("decoding string to base64: %w", err)
-	}
-
-	*b = decoded
-	return nil
-}
-
 type Bundle struct {
 	Signature Base64Bytes `json:"io.deckhouse.delivery-kit.signature"`
 	Cert      Base64Bytes `json:"io.deckhouse.delivery-kit.cert"`
